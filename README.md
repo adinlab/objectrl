@@ -1,7 +1,7 @@
 # ObjectRL
 
 [![docs](https://readthedocs.org/projects/objectrl/badge/?version=latest)](https://objectrl.readthedocs.io/en/latest/)
-[![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/adinlab/objectrl/blob/main/LICENSE)
+[![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/adinlab/objectrl/blob/master/LICENSE)
 <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
 
 **ObjectRL** is a deep reinforcement learning library designed for research and rapid prototyping. It focuses on deep actor-critic algorithms for continuous control tasks such as those in the MuJoCo environment suite, while providing a flexible object-oriented architecture that supports future extensions to value-based and discrete-action methods.
