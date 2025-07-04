@@ -31,11 +31,16 @@
 - **BNN-SAC** (Bayesian Neural Network SAC) — experimental, in examples  
 - **DQN** (Deep Q-Network) — experimental, in examples  
 
-> Currently, ObjectRL mainly supports continuous control tasks and MuJoCo environments but is designed to be extended.
-
 ---
 
 ## Installation
+
+### Create Environment
+
+```bash
+conda create -n objectrl python=3.12 -y
+conda activate objectrl
+```
 
 ### Using PyPI (Recommended)
 
