@@ -41,7 +41,8 @@ The configuration dataclass encapsulates all hyperparameters needed for the bonu
 
 .. literalinclude:: ../../objectrl/config/model_configs/drnd.py
     :language: python
-    :lines: 9-34
+    :start-after: [start-bonus-config]
+    :end-before: [end-bonus-config]
 
 The network initialization leverages our existing utilities for consistent architecture across predictor
 and ensemble members:

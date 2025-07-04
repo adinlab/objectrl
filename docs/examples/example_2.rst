@@ -55,7 +55,6 @@ This means we need to inherit a ``REDQCritic`` class from ``SACCritic`` with a m
     :language: python
     :start-after: [start-reduce-code]
     :end-before: [end-reduce-code]
-    :emphasize-lines: 29-45
 
 REDQ ActorCritic and REDQ Actor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

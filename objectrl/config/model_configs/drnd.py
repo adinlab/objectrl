@@ -27,6 +27,7 @@ from objectrl.nets.critic_nets import CriticNet
 
 
 # [start-config]
+# [start-bonus-config]
 @dataclass
 class DRNDBonusConfig:
     """
@@ -53,7 +54,7 @@ class DRNDBonusConfig:
     scale_factor: float = 0.9
     n_members: int = 10
     learning_rate: float = 1e-4
-
+# [end-bonus-config]
 
 @dataclass
 class DRNDActorConfig:
