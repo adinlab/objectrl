@@ -10,10 +10,7 @@ build:
 
 python:
   install:
-    - method: pip
-      path: .
-    - method: pip
-      requirements: docs/requirements.txt
+    - requirements: docs/requirements.txt
 
 sphinx:
   configuration: docs/conf.py
