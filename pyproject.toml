@@ -3,9 +3,9 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ObjectRL"
-version = "0.0.1"
-description = "ObjectRL"
+name = "objectrl"
+version = "0.1.0"
+description = "ObjectRL: An Object-Oriented Reinforcement Learning Codebase"
 requires-python = ">=3.12"
 authors = [
     { name = "Abdullah Akgul", email = "akgul@imada.sdu.dk" },
@@ -20,7 +20,7 @@ license = {text = "MIT"}
 readme = {file = "README.md", content-type = "text/markdown"}
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "Intended Audience :: Researchers",
+    "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
