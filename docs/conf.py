@@ -52,6 +52,7 @@ autodoc_default_options = {
 
 html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
+html_logo = "_static/imgs/logo.svg"
 html_css_files = [
     "css/custom.css",
 ]
