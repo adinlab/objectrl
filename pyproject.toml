@@ -1,0 +1,108 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ObjectRL"
+version = "0.0.1"
+description = "ObjectRL"
+requires-python = ">=3.12"
+authors = [
+    { name = "Abdullah Akgul", email = "akgul@imada.sdu.dk" },
+    { name = "Bahareh Tasdighi", email = "tasdighi@imada.sdu.dk" },
+    { name = "Gulcin Baykal Can", email = "baykalg@imada.sdu.dk" },
+    { name = "Manuel Haussmann", email = "haussmann@imada.sdu.dk" },
+    { name = "Melih Kandemir", email = "kandemir@imada.sdu.dk" },
+    { name = "Nicklas Werge", email = "werge@sdu.dk" },
+    { name = "Yi-Shan Wu", email = "yswu@imada.sdu.dk" },
+]
+license = {text = "MIT"}
+readme = {file = "README.md", content-type = "text/markdown"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Researchers",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "gymnasium[mujoco]>=1.1.1",
+    "torch>=2.7.0",
+    "torchrl>=0.8.1",
+    "tqdm>=4.67.1",
+    "tyro>=0.9.22",
+    "matplotlib>=3.10.3",
+    "pandas>=2.2.3",
+    "tabulate>=0.9.0",
+    "pyyaml>=6.0.2",
+]
+
+[project.optional-dependencies]
+docs = [
+    "sphinx>=8.2.3",
+    "sphinx-book-theme>=1.1.4",
+    "sphinxcontrib-pseudocode>=0.7.0",
+    "sphinx-simplepdf>=1.6.0",
+    "sphinx-tabs>=3.4.7",
+    "sphinx-copybutton>=0.5.2",
+]
+tests = [
+    "pytest"
+]
+dev = [
+    "black>=25.1.0",
+    "ruff>=0.12.1",
+    "ty>=0.0.1a13",
+]
+
+[tools.setuptools.packages.find]
+where = ["objectrl"]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+# See https://docs.astral.sh/ruff/rules/
+lint.select = [
+  "E",    # pycodestyle errors
+  "W",    # pycodestyle warnings
+  "F",    # pyflakes
+  "I",    # isort 
+  "B",    # flake8-bugbear
+  "C4",   # flake8-comprehensions
+  "UP",   # pyupgrade
+  "C90",  # mccabe complexity
+]
+# Trailing whitespaces and too long lines are ignored (conflicts with black)
+lint.ignore = ["E203", "E501"]
+
+# ruff automatically fixes issues when `ruff check --fix` is run
+fix = true
+
+exclude = [
+    ".venv",
+    "docs",
+    "examples",
+    "tests",
+    "__pycache__",
+]
+
+[tool.ty.src]
+include = ["./objectrl"] 
+exclude = [
+    ".venv",
+    "docs",
+    "examples",
+    "tests",
+    "__pycache__",
+]
+
+
+
+
+# TODO: add project URLs
+# [project.urls]
+# Homepage = "https://"
+# Documentation = "https://"
+# Repository = "https://github.com/"

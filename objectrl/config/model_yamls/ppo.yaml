@@ -1,0 +1,7 @@
+model:
+  name: ppo
+training:
+  warmup_steps: 0
+  learn_frequency: 2048
+  batch_size: 64
+  n_epochs: 10

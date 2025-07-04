@@ -1,0 +1,6 @@
+sphinx>=8.2.3
+sphinx-book-theme>=1.1.4
+sphinx-tabs>=3.4.7
+sphinx-copybutton>=0.5.2
+sphinxcontrib-pseudocode>=0.7.0
+sphinx-simplepdf>=1.6.0

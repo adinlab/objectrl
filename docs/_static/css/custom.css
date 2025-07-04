@@ -1,0 +1,11 @@
+.doc-tag {
+    display: inline-block;
+    background: #3079c7;
+    color: #fff;
+    border-radius: 12px;
+    padding: 2px 12px;
+    margin: 0 4px 4px 0;
+    font-size: 0.95em;
+    font-weight: 500;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.07);
+  }
