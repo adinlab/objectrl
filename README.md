@@ -119,4 +119,21 @@ training:
 
 Explore detailed documentation, tutorials, and API references at: [https://objectrl.readthedocs.io](https://objectrl.readthedocs.io)
 
+---
+
+## Citation
+
+If you use ObjectRL in your research, please cite:
+
+```bibtex
+@article{baykal2025objectrl,
+  title={ObjectRL: An Object-Oriented Reinforcement Learning Codebase}, 
+  author={Baykal, Gulcin and  Akg{\"u}l, Abdullah and Haussmann, Manuel and Tasdighi, Bahareh and Werge, Nicklas and Wu Yi-Shan and Kandemir, Melih},
+  year={2025},
+  journal={arXiv preprint arXiv:2507.03487}
+}
+```
+
+
+
 

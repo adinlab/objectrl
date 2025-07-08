@@ -53,16 +53,16 @@ Currently, the main algorithms supported include:
 The library's current strength and focus lie in continuous control and actor-critic methods. However, value-based and discrete action algorithms are supported experimentally.
 This foundation facilitates rapid algorithmic development and experimentation in research.
 
-.. Citation
-.. --------
+Citation
+--------
 
-.. If you use ObjectRL in your research, please consider citing the following paper:
+If you use ObjectRL in your research, please consider citing the following paper:
 
-.. .. code-block:: bibtex
+.. code-block:: bibtex
 
-..    @article{objectrl,
-..      title={X},
-..      author={X},
-..      journal={arXiv preprint arXiv:XXXX.XXXX},
-..      year={2025}
-..    }
+   @article{baykal2025objectrl,
+      title={ObjectRL: An Object-Oriented Reinforcement Learning Codebase}, 
+      author={Baykal, Gulcin and  Akg{\"u}l, Abdullah and Haussmann, Manuel and Tasdighi, Bahareh and Werge, Nicklas and Wu Yi-Shan and Kandemir, Melih},
+      year={2025},
+      journal={arXiv preprint arXiv:2507.03487}
+    }
