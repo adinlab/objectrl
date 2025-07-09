@@ -1,7 +1,7 @@
 # ObjectRL
 
 [![docs](https://readthedocs.org/projects/objectrl/badge/?version=latest)](https://objectrl.readthedocs.io/en/latest/)
-[![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/adinlab/objectrl/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/adinlab/objectrl/blob/master/LICENSE)
 <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
 
 <p align="center">

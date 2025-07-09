@@ -1,21 +1,19 @@
 # -----------------------------------------------------------------------------------
-# MIT License
-# Copyright (c) 2025 ADIN Lab
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# Copyright (C) 2025 ADIN Lab
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # -----------------------------------------------------------------------------------
 
 import math
@@ -96,32 +94,34 @@ class BayesianLinear(ABC, nn.Module):
             self.register_parameter("bias_mu", None)
             self.register_parameter("bias_rho", None)
 
+        # Register prior mean and std as buffers to track their device usage
         if prior_mean is None:
-            self.prior_mean = torch.zeros(1, **factory_kwargs)
+            prior_mean = torch.zeros(1, **factory_kwargs)
         elif isinstance(prior_mean, float):
-            self.prior_mean = torch.tensor(prior_mean, **factory_kwargs)
+            prior_mean = torch.tensor(prior_mean, **factory_kwargs)
         elif isinstance(prior_mean, torch.Tensor):
             assert prior_mean.shape == (1,) or prior_mean.shape == (
                 out_features,
                 in_features,
             ), "Prior mean needs to be either a scalar or the same shape of the weights"
-            self.prior_mean = prior_mean.to(**factory_kwargs)
+            prior_mean = prior_mean.to(**factory_kwargs)
         else:
             raise ValueError("Prior mean needs to be a float or a torch.Tensor")
-        self.prior_mean.requires_grad_(False)
+        self.register_buffer("prior_mean", prior_mean)
 
         if prior_std is None:
-            self.prior_std = torch.ones(1, **factory_kwargs)
+            prior_std = torch.ones(1, **factory_kwargs)
         elif isinstance(prior_std, float):
-            self.prior_std = torch.tensor(prior_std, **factory_kwargs)
+            prior_std = torch.tensor(prior_std, **factory_kwargs)
         elif isinstance(prior_std, torch.Tensor):
             assert prior_std.shape == (1,) or prior_std.shape == (
                 out_features,
                 in_features,
             )
-            self.prior_std = prior_std.to(**factory_kwargs)
+            prior_std = prior_std.to(**factory_kwargs)
         else:
             raise ValueError("Prior std needs to be a float or a torch.Tensor")
+        self.register_buffer("prior_std", prior_std)
 
         self.reset_parameters()
 

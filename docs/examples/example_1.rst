@@ -145,7 +145,7 @@ different state-action pairs:
     :language: python
     :start-after: [start-critic-code]
     :end-before: [end-critic-code]
-    :emphasize-lines: 51, 52
+    :emphasize-lines: 49, 50
 
 
 DRND ActorCritic
