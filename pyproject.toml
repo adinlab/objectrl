@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "objectrl"
-version = "0.1.0"
+version = "0.1.1.post1"
 description = "ObjectRL: An Object-Oriented Reinforcement Learning Codebase"
 requires-python = ">=3.12"
 authors = [
@@ -16,7 +16,7 @@ authors = [
     { name = "Nicklas Werge", email = "werge@sdu.dk" },
     { name = "Yi-Shan Wu", email = "yswu@imada.sdu.dk" },
 ]
-license = {text = "MIT"}
+license = {text = "GPL-3.0-or-later"}
 readme = {file = "README.md", content-type = "text/markdown"}
 classifiers = [
     "Development Status :: 3 - Alpha",
