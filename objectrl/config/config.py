@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -79,6 +79,8 @@ class EnvConfig:
         noisy (NoiseConfig | None): Optional noise configuration.
         position_delay (float | None): Optional delay in position updates.
         control_cost_weight (float | ): Optional weight for control cost penalty.
+        parallelize_train (bool): Parallel environments during training
+        parallelize_eval (bool): Parallel environments during evaluation
     """
 
     name: (
@@ -126,6 +128,7 @@ class TrainingConfig:
     ### Evaluation settings
     eval_episodes: int = 10
     eval_frequency: int = 20_000
+    parallelize_eval: bool = False
 
     optimizer: str = "Adam"
 
