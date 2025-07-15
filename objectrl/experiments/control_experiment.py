@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -49,6 +49,7 @@ class ControlExperiment(Experiment):
         self.max_steps: int = self.config.training.max_steps
         self.warmup_steps: int = self.config.training.warmup_steps
         self.device = torch.device(config.system.device)
+        self._vectorized_eval = self.config.training.parallelize_eval
 
     def train(self) -> None:
         """
@@ -172,7 +173,7 @@ class ControlExperiment(Experiment):
         self.agent.logger.save(information_dict, episode, step)
         self.agent.logger.log(f"Training time: {time_end - time_start:.2f} seconds")
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def eval(self, n_step: int) -> None:
         """
         Evaluates the agent over multiple episodes in the evaluation environment.
@@ -199,29 +200,53 @@ class ControlExperiment(Experiment):
         # Store rewards for evaluation episodes
         results = torch.zeros(self.config.training.eval_episodes)
 
-        # Run multiple evaluation episodes
-        for episode in range(self.config.training.eval_episodes):
-            s, info = self.eval_env.reset()
-            s = totorch(s, device=self.device)
-            step = 0
+        if self._vectorized_eval:
+            states, _ = self.eval_env.reset()
+            states = totorch(states, device=self.device)
 
-            done = False
+            dones = torch.zeros(self.config.training.eval_episodes, dtype=torch.bool)
+            while not torch.all(dones):
+                actions = self.agent.select_action(states, is_training=False)["action"]
 
-            while not done:
-                # Select action using the agent's policy (without exploration)
-                a = self.agent.select_action(s, is_training=False)["action"]
+                if self._discrete_action_space:
+                    actions = actions.int()
 
-                # Execute action in the environment
-                sp, r, term, trunc, info = self.eval_env.step(
-                    int(a) if self._discrete_action_space else tonumpy(a)
+                next_states, rewards, term, trunc, _ = self.eval_env.step(
+                    tonumpy(actions)
                 )
 
-                # Check termination condition
-                done = term or trunc
-                # Update state and record reward
-                s = totorch(sp, device=self.device)
-                results[episode] += r
-                step += 1
+                done = torch.tensor(term) | torch.tensor(trunc)
+                results += torch.tensor(rewards) * (
+                    ~done
+                )  # only add reward to running environments
+                dones |= done
+
+                states = totorch(next_states, device=self.device)
+
+        else:
+            # Run multiple evaluation episodes
+            for episode in range(self.config.training.eval_episodes):
+                state, info = self.eval_env.reset()
+                state = totorch(state, device=self.device)
+
+                done = False
+
+                while not done:
+                    # Select action using the agent's policy (without exploration)
+                    action = self.agent.select_action(state, is_training=False)[
+                        "action"
+                    ]
+
+                    # Execute action in the environment
+                    next_state, reward, term, trunc, info = self.eval_env.step(
+                        int(action) if self._discrete_action_space else tonumpy(action)
+                    )
+
+                    # Check termination condition
+                    done = term or trunc
+                    # Update state and record reward
+                    state = totorch(next_state, device=self.device)
+                    results[episode] += reward
 
         self.agent.logger.save_eval_results(n_step, results)
         self.agent.train()
