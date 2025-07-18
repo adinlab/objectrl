@@ -186,8 +186,8 @@ class Logger:
         episode_steps = info["episode_steps"][: episode + 1]
         step_rewards = info["step_rewards"][: n_step + 1]
 
-        numpy.save(self.path / "episode_rewards.numpy", episode_rewards)
-        numpy.save(self.path / "step_rewards.numpy", step_rewards)
+        numpy.save(self.path / "episode_rewards.npy", episode_rewards)
+        numpy.save(self.path / "step_rewards.npy", step_rewards)
         self.plot_rewards(episode_rewards, episode_steps)
 
     @staticmethod
@@ -222,7 +222,7 @@ class Logger:
             f"EVALUATION\tN-steps: {n_step:7d}\tMean_Reward: {mean_reward:10.3f}\tIQM_Reward: {iqm:10.3f}"
         )
         self.eval_results[n_step] = rewards
-        numpy.save(self.path / "eval_results.numpy", self.eval_results)
+        numpy.save(self.path / "eval_results.npy", self.eval_results)
 
         # Plot evaluation curve
         self._plot_eval_curve()
