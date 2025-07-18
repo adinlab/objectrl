@@ -178,7 +178,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Ignore log files and result files
+# Ignore log files, result files, and scripts
 *_logs*
 *_results*
 *.log
+/scripts/
