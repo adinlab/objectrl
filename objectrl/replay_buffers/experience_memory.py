@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -91,7 +91,8 @@ class ReplayBuffer:
             self.memory.add(experience)
         except OSError:
             warnings.warn(
-                "Failed to add experience to replay buffer, triggering a manual garbage collection"
+                "Failed to add experience to replay buffer, triggering a manual garbage collection",
+                stacklevel=2,
             )
             gc.collect()
             self.memory.add(experience)
@@ -110,7 +111,8 @@ class ReplayBuffer:
             self.memory.extend(batch)
         except OSError:
             warnings.warn(
-                "Failed to add experience to replay buffer, triggering a manual garbage collection"
+                "Failed to add experience to replay buffer, triggering a manual garbage collection",
+                stacklevel=2,
             )
             gc.collect()
             self.memory.extend(batch)

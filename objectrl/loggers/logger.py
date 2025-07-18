@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify

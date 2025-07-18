@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -52,7 +52,10 @@ class DRNDBonusConfig:
     scale_factor: float = 0.9
     n_members: int = 10
     learning_rate: float = 1e-4
+
+
 # [end-bonus-config]
+
 
 @dataclass
 class DRNDActorConfig:
