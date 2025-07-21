@@ -42,6 +42,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
+import numpy
 import tyro
 
 from objectrl.config.model import (
@@ -150,10 +151,15 @@ class SystemConfig:
 
     num_threads: int = -1
     seed: int = 1
+    random_seed: bool = False
     runid: int = 999
     uniqueid: bool = False
     device: Literal["cpu", "cuda"] = "cuda"
     storing_device: Literal["cpu"] = "cpu"
+
+    def __post_init__(self):
+        if self.random_seed:
+            self.seed = numpy.random.randint(2**32)
 
 
 # [end-system-config]
