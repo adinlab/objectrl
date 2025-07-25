@@ -79,8 +79,6 @@ class EnvConfig:
         noisy (NoiseConfig | None): Optional noise configuration.
         position_delay (float | None): Optional delay in position updates.
         control_cost_weight (float | ): Optional weight for control cost penalty.
-        parallelize_train (bool): Parallel environments during training
-        parallelize_eval (bool): Parallel environments during evaluation
     """
 
     name: (
