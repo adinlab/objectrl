@@ -143,17 +143,15 @@ class SystemConfig:
     Attributes:
         num_threads (int): Number of threads (-1 for auto).
         seed (int): Random seed.
-        runid (int): Unique identifier for the run.
-        uniqueid (bool): Whether to auto-generate a unique ID.
+        random_seed (int): Let the config sample a random seed
         device (str): Runtime device ("cpu" or "cuda").
         storing_device ("cpu"): Device used for storing models/data. Only storing on CPU is supported
     """
 
     num_threads: int = -1
     seed: int = 1
+    # Initialize with a random seed
     random_seed: bool = False
-    runid: int = 999
-    uniqueid: bool = False
     device: Literal["cpu", "cuda"] = "cuda"
     storing_device: Literal["cpu"] = "cpu"
 
