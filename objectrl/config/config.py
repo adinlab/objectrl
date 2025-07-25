@@ -128,6 +128,7 @@ class TrainingConfig:
     ### Evaluation settings
     eval_episodes: int = 10
     eval_frequency: int = 20_000
+    # Run evaluations in parallel or sequentially
     parallelize_eval: bool = False
 
     optimizer: str = "Adam"
