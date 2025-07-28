@@ -50,6 +50,7 @@ class ControlExperiment(Experiment):
         self.warmup_steps: int = self.config.training.warmup_steps
         self.device = torch.device(config.system.device)
         self._vectorized_eval = self.config.training.parallelize_eval
+        self.verbose = self.config.verbose
 
     def train(self) -> None:
         """
@@ -249,6 +250,8 @@ class ControlExperiment(Experiment):
                     results[episode] += reward
 
         self.agent.logger.save_eval_results(n_step, results)
+        if self.verbose:
+            tqdm.write(f"{n_step}: {results.mean():.4f} +/- {results.std():.4f}")
         self.agent.train()
 
         # Restore RNG states
