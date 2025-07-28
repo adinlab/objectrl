@@ -28,7 +28,7 @@ from objectrl.utils.environment.noisy_wrappers import (
 from objectrl.utils.environment.reward_wrappers import PositionDelayWrapper
 
 
-def make_env(  # noqa
+def make_env(  # noqa: C901
     env_name: str, seed: int, env_config, eval_env: bool = False, num_envs: int = 1
 ) -> gym.Env | gym.vector.VectorEnv:
     """
