@@ -100,7 +100,7 @@ Training Configuration
 
 .. raw:: html
 
-    <p><strong>Training</strong> configuration controls the learning process of the agent. It includes essential hyperparameters such as learning rate, batch size, and number of training steps. These parameters directly influence the stability, speed, and performance of the algorithm. With this configuration, you can easily tune experiments to meet different research goals or computational constraints.</p>
+    <p> <strong>Training</strong> configuration controls the learning process of the agent. It includes essential hyperparameters such as learning rate, batch size, and number of training steps. These parameters directly influence the stability, speed, and performance of the algorithm. With this configuration, you can easily tune experiments to meet different research goals or computational constraints. <code>parallelize_eval</code> initializes <code>eval_episodes</code> number of environments to evaluate in parallel instead of sequentially. If memory is not a bottleneck, this flag provides strong speed improvements as the number of evaluation episodes grows.</p>
 
 System Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
