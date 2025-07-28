@@ -145,7 +145,8 @@ class SystemConfig:
         seed (int): Random seed.
         random_seed (int): Let the config sample a random seed
         device (str): Runtime device ("cpu" or "cuda").
-        storing_device ("cpu"): Device used for storing models/data. Only storing on CPU is supported
+        storing_device ("cpu" or "cuda'): Device used for storing models/data. Store on the CPU if memory is a constraint
+            otherwise prefer the gpu
     """
 
     num_threads: int = -1
@@ -153,7 +154,7 @@ class SystemConfig:
     # Initialize with a random seed
     random_seed: bool = False
     device: Literal["cpu", "cuda"] = "cuda"
-    storing_device: Literal["cpu"] = "cpu"
+    storing_device: Literal["cpu", "cuda"] = "cuda"
 
     def __post_init__(self):
         if self.random_seed:
