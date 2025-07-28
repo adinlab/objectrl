@@ -275,7 +275,4 @@ class BayesianMLP(nn.Module):
                 kl, n = layer.KL()
                 total_kl += kl
                 n_params += n
-        return (
-            total_kl,
-            n_params,
-        )  # ty: ignore // ty complaints about the discrepancy between float and torch.tensor
+        return total_kl, n_params  # ty: ignore (Ty thinks that total_kl stays a float)
