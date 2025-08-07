@@ -155,8 +155,8 @@ class Critic(nn.Module):
         for target_param, local_param in zip(
             self.target.parameters(), self.model.parameters(), strict=True
         ):
-            target_param.data.mul_(1.0 - self._tau)
-            target_param.data.add_(self._tau * local_param.data)
+            # Combine x = (1 - tau) * x + tau * y into a single inplace operation
+            target_param.data.lerp_(local_param.data, self._tau)
 
     def Q_t(
         self, state: torch.Tensor, action: torch.Tensor | None = None
@@ -410,9 +410,9 @@ class CriticEnsemble(nn.Module, ABC):
         """
         assert self.has_target, "There is no target network to update"
         for key in self.model_ensemble.params.keys():
-            self.target_ensemble.params[key].data.mul_(1.0 - self._tau)
-            self.target_ensemble.params[key].data.add_(
-                self._tau * self.model_ensemble.params[key].data
+            # Combine x = (1 - tau) * x + tau * y into a single inplace operation
+            self.target_ensemble.params[key].data.lerp_(
+                self.model_ensemble.params[key].data, self._tau
             )
 
     @abstractmethod
