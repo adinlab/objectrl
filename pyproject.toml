@@ -97,12 +97,3 @@ exclude = [
     "tests",
     "__pycache__",
 ]
-
-
-
-
-# TODO: add project URLs
-# [project.urls]
-# Homepage = "https://"
-# Documentation = "https://"
-# Repository = "https://github.com/"
