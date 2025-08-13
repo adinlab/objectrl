@@ -56,13 +56,23 @@ Running Your First Experiment
 
 You can launch your first RL experiment directly from the command line.
 
-1. **Run SAC on the default ``cheetah`` environment:**
+1. **Run SAC on the default** ``cheetah`` **environment:**
+
+   If installed from PyPI, use:
+
+   .. code-block:: bash
+
+      python -m objectrl.main --model.name sac
+   
+   If installed from GitHub, use:
 
    .. code-block:: bash
 
       python objectrl/main.py --model.name sac
+   
+   Other examples will assume the GitHub installation.
 
-2. **Run DDPG on the ``hopper`` environment:**
+2. **Run DDPG on the** ``hopper`` **environment:**
 
    .. code-block:: bash
 
