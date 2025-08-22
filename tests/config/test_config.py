@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -79,15 +79,12 @@ def test_system_config_defaults_and_override():
     system = SystemConfig()
     assert system.num_threads == -1
     assert system.seed == 1
-    assert system.runid == 999
-    assert system.uniqueid is False
     assert system.device == "cuda"
     assert system.storing_device == "cpu"
 
-    system2 = SystemConfig(device="cpu", seed=42, runid=123)
+    system2 = SystemConfig(device="cpu", seed=42)
     assert system2.device == "cpu"
     assert system2.seed == 42
-    assert system2.runid == 123
 
 
 def test_env_config_name_literals():

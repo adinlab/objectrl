@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -33,6 +33,7 @@ and producing a structured configuration object for a training pipeline.
 
 import copy
 import functools
+import os
 import pprint
 import sys
 import typing
@@ -42,6 +43,7 @@ from io import StringIO
 from pathlib import Path
 from typing import Any
 
+import torch
 import tyro
 import yaml
 
@@ -328,8 +330,25 @@ def setup_config(
 
     # create the main config given the final config dict
     config = MainConfig.from_config(final_dict)
-    assert config.model.name != "abstract", "No model specified"
 
+    # Final config consistency checks
+    assert config.model.name != "abstract", "No model specified"
+    # Check for correct device choice
+    if not torch.cuda.is_available():
+        if config.system.storing_device == "cuda":
+            raise RuntimeError(
+                f"Found no NVIDIA GPU available on this device. Rerun with '--system.storing_device=cpu' to avoid this error."
+            )
+        if config.system.device == "cuda":
+            raise RuntimeError(
+                f"Found no NVIDIA GPU available on this device. Rerun with '--system.device=cpu' to avoid this error."
+            )
+
+    # Check for accessability of path
+    if not os.access(config.logging.result_path, os.W_OK):
+        raise PermissionError(
+            f"Cannot write to {config.logging.result_path}. Please run with '--logging.result_path=<path>' where <path> has write access."
+        )
     return config
 
 

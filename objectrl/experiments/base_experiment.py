@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -66,7 +66,15 @@ class Experiment:
 
         self.env = make_env(env_name, self.config.system.seed, self.config.env)
         self.eval_env = make_env(
-            env_name, self.config.system.seed, self.config.env, eval_env=True
+            env_name,
+            self.config.system.seed,
+            self.config.env,
+            eval_env=True,
+            num_envs=(
+                self.config.training.eval_episodes
+                if self.config.training.parallelize_eval
+                else 1
+            ),
         )
 
         # Extract environmental hyperparameters into the general config file

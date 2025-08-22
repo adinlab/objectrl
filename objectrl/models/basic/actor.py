@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -166,8 +166,8 @@ class Actor(nn.Module, ABC):
         for target_param, local_param in zip(
             self.target.parameters(), self.model.parameters(), strict=True
         ):
-            target_param.data.mul_(1.0 - self._tau)
-            target_param.data.add_(self._tau * local_param.data)
+            # Combine x = (1 - tau) * x + tau * y into a single inplace operation
+            target_param.data.lerp_(local_param.data, self._tau)
 
     @abstractmethod
     def loss(self, *args, **kwargs) -> torch.Tensor:

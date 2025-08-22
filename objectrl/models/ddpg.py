@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -139,7 +139,7 @@ class DDPGActor(Actor):
         """
         action_dict = super().act(state)
         action = action_dict["action"]
-        action_dict["action_wo_noise"] = action
+        action_dict["action_wo_noise"] = action.clone()
         if is_training:
             noise = self.noise().to(action.device)
             action += noise

@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -81,7 +81,7 @@ class Agent(nn.Module, ABC):
         # Get the action space dimensionality
         if isinstance(self.config_env.env.action_space, gym.spaces.Box):
             assert (
-                len(self.config_env.env.observation_space.shape) == 1
+                len(self.config_env.env.action_space.shape) == 1
             ), f"Observation space must be an integer, got {self.config_env.env.observation_space.shape}"
             self.dim_act = self.config_env.env.action_space.shape[0]
         elif isinstance(self.config_env.env.action_space, gym.spaces.Discrete):

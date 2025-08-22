@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -21,14 +21,19 @@ from collections.abc import Iterator
 
 import torch
 from tensordict import TensorDict
-from torchrl.data import LazyMemmapStorage, TensorDictReplayBuffer
+from torchrl.data import (
+    LazyMemmapStorage,
+    LazyTensorStorage,
+    TensorDictReplayBuffer,
+)
 
 
 class ReplayBuffer:
     """
     A fixed-size replay buffer to store and sample experience tuples for reinforcement learning.
 
-    This buffer uses lazy memory mapping and TorchRL's TensorDictReplayBuffer for efficient storage and retrieval.
+    This buffer uses either lazy memory mapping on the cpu or a lazy tensor on the gpu
+    and TorchRL's TensorDictReplayBuffer for efficient storage and retrieval.
     """
 
     def __init__(
@@ -43,7 +48,8 @@ class ReplayBuffer:
 
         Args:
             device (torch.device): The device to move sampled batches to (usually the training device).
-            storing_device (torch.device): The device to store the experience buffer (e.g., CPU or shared memory).
+            storing_device (torch.device): The device to store the experience buffer (e.g., CPU or gpu).
+                Unless memory is a concern, use `cuda` to improve runtime.
             buffer_size (int): Maximum number of experience tuples the buffer can hold.
             print_gc_warning (bool): Print a warning that the garbage collector is run
 
@@ -53,8 +59,21 @@ class ReplayBuffer:
         self.device = device
         self.storing_device = storing_device
         self.buffer_size = buffer_size
-
+        self.print_gc_warning = print_gc_warning
         self.reset()
+
+    def _get_storage(
+        self, buffer_size: int, device: torch.device
+    ) -> LazyMemmapStorage | LazyTensorStorage:
+        # Use LazyMemmap on CPU and LazyTensorStorage on GPU
+        if device.type == "cpu":
+            return LazyMemmapStorage(buffer_size, device=device)
+        elif device.type == "cuda":
+            return LazyTensorStorage(buffer_size, device=device)
+        else:
+            raise NotImplementedError(
+                f"No storage support for device type: {device.type}"
+            )
 
     def reset(self, buffer_size: int | None = None) -> None:
         """
@@ -72,8 +91,7 @@ class ReplayBuffer:
         self.data_size = 0
         self.pointer = 0
 
-        # Using LazyMemmapStorage for efficient memory handling
-        storage = LazyMemmapStorage(self.buffer_size, device=self.storing_device)
+        storage = self._get_storage(self.buffer_size, self.storing_device)
 
         # Initialize TensorDictReplayBuffer with the storage
         self.memory = TensorDictReplayBuffer(storage=storage)
@@ -91,7 +109,8 @@ class ReplayBuffer:
             self.memory.add(experience)
         except OSError:
             warnings.warn(
-                "Failed to add experience to replay buffer, triggering a manual garbage collection"
+                "Failed to add experience to replay buffer, triggering a manual garbage collection",
+                stacklevel=2,
             )
             gc.collect()
             self.memory.add(experience)
@@ -110,7 +129,8 @@ class ReplayBuffer:
             self.memory.extend(batch)
         except OSError:
             warnings.warn(
-                "Failed to add experience to replay buffer, triggering a manual garbage collection"
+                "Failed to add experience to replay buffer, triggering a manual garbage collection",
+                stacklevel=2,
             )
             gc.collect()
             self.memory.extend(batch)
@@ -127,7 +147,7 @@ class ReplayBuffer:
         Returns:
             TensorDict: A batch of randomly sampled experiences moved to the working device.
         """
-        batch = self.memory.sample(batch_size).to(self.device)
+        batch = self.memory.sample(batch_size).to(self.device).clone()
         return batch
 
     def sample_random(self, batch_size: int) -> TensorDict:
@@ -151,10 +171,12 @@ class ReplayBuffer:
         Returns:
             TensorDict: A batch of selected experiences moved to the working device.
         """
+
         if isinstance(indices, range):
             indices = torch.tensor(list(indices), device=self.storing_device)
-        samples = self.memory.storage[indices].to(self.device)
-        return samples
+        elif isinstance(indices, list):
+            indices = torch.tensor(indices, device=self.storing_device)
+        return self.memory.storage[indices].to(self.device).clone()
 
     def sample_by_index_fields(
         self, indices: list | torch.Tensor | range, fields: list
@@ -171,8 +193,9 @@ class ReplayBuffer:
         """
         if isinstance(indices, range):
             indices = torch.tensor(list(indices), device=self.storing_device)
-        samples = self.memory.storage[indices]
-        return samples.select(fields).to(self.device)
+        elif isinstance(indices, list):
+            indices = torch.tensor(indices, device=self.storing_device)
+        return self.memory.storage[indices].select(fields).to(self.device).clone()
 
     def sample_all(self) -> TensorDict:
         """
@@ -273,12 +296,8 @@ class ReplayBuffer:
         """
 
         if self.epoch_iterator is not None:
-            batch = next(self.epoch_iterator)
-        else:
-            # Random sampling
-            batch = self.sample_batch(batch_size)
-
-        return batch
+            return next(self.epoch_iterator)
+        return self.sample_batch(batch_size)
 
     def calculate_num_batches(self, batch_size: int) -> int:
         """

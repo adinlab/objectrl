@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -42,6 +42,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
+import numpy
 import tyro
 
 from objectrl.config.model import (
@@ -126,6 +127,8 @@ class TrainingConfig:
     ### Evaluation settings
     eval_episodes: int = 10
     eval_frequency: int = 20_000
+    # Run evaluations in parallel or sequentially
+    parallelize_eval: bool = False
 
     optimizer: str = "Adam"
 
@@ -142,18 +145,22 @@ class SystemConfig:
     Attributes:
         num_threads (int): Number of threads (-1 for auto).
         seed (int): Random seed.
-        runid (int): Unique identifier for the run.
-        uniqueid (bool): Whether to auto-generate a unique ID.
+        random_seed (int): Let the config sample a random seed
         device (str): Runtime device ("cpu" or "cuda").
-        storing_device ("cpu"): Device used for storing models/data. Only storing on CPU is supported
+        storing_device ("cpu" or "cuda'): Device used for storing models/data. Store on the CPU if memory is a constraint
+            otherwise prefer the gpu
     """
 
     num_threads: int = -1
     seed: int = 1
-    runid: int = 999
-    uniqueid: bool = False
+    # Initialize with a random seed
+    random_seed: bool = False
     device: Literal["cpu", "cuda"] = "cuda"
-    storing_device: Literal["cpu"] = "cpu"
+    storing_device: Literal["cpu", "cuda"] = "cuda"
+
+    def __post_init__(self):
+        if self.random_seed:
+            self.seed = numpy.random.randint(2**32)
 
 
 # [end-system-config]

@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------------
-# ObjectRL: An Object-Oriented Reinforcement Learning Codebase 
+# ObjectRL: An Object-Oriented Reinforcement Learning Codebase
 # Copyright (C) 2025 ADIN Lab
 
 # This program is free software: you can redistribute it and/or modify
@@ -271,8 +271,8 @@ class BayesianMLP(nn.Module):
         total_kl = 0.0
         n_params = 0
         for layer in self.model:
-            if isinstance(layer, (BBBLinear, LRLinear, CLTLinear)):
+            if isinstance(layer, BBBLinear | LRLinear | CLTLinear):
                 kl, n = layer.KL()
                 total_kl += kl
                 n_params += n
-        return total_kl, n_params
+        return total_kl, n_params  # ty: ignore (Ty thinks that total_kl stays a float)
