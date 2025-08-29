@@ -46,13 +46,13 @@ conda create -n objectrl python=3.12 -y
 conda activate objectrl
 ```
 
-### Using PyPI (Recommended)
+### Using PyPI
 
 ```bash
 pip install objectrl
 ```
 
-### From Source (Latest Development Version)
+### From Source
 
 ```bash
 git clone https://github.com/adinlab/objectrl.git
@@ -63,8 +63,9 @@ pip install -e .
 ### Optional Dependencies
 
 To enable additional features such as documentation generation:
+
 ```bash
-pip install objectrl['docs']
+pip install objectrl[docs]
 ```
 
 ---
@@ -73,9 +74,19 @@ pip install objectrl['docs']
 
 Run your first experiment using Soft Actor-Critic (SAC) on the default `cheetah` environment:
 
+If installed from PyPI:
+
+```bash
+python -m objectrl.main --model.name sac
+```
+
+If running from a cloned repo:
+
 ```bash
 python objectrl/main.py --model.name sac
 ```
+
+Other examples will assume running from a cloned repo.
 
 ### Change Algorithm and Environment
 
@@ -112,6 +123,14 @@ training:
   batch_size: 64
   n_epochs: 10
 ```
+
+---
+
+## Need Help?
+
+If you encounter common issues or errors during installation or usage, please see the [Issues](ISSUES.md) guide for solutions and tips.
+
+For other questions or to report bugs, visit our [GitHub Issues page](https://github.com/adinlab/objectrl/issues).
 
 ---
 

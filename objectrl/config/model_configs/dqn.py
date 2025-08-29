@@ -55,4 +55,4 @@ class DQNConfig:
     # Polyak averaging rate
     tau: float = 0.005
 
-    critic: DQNCriticConfig = field(default=DQNCriticConfig)
+    critic: DQNCriticConfig = field(default_factory=DQNCriticConfig)
