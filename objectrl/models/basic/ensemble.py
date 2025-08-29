@@ -39,6 +39,7 @@ class Ensemble[T: nn.Module](nn.Module, ABC):
         buffers (dict[str, torch.Tensor]): Stacked buffers of the ensemble members.
         base_model (nn.Module): Base model structure for functional calls.
         forward_model (torch.nn.functional): Vectorized function to call the model.
+        sequential (bool): Whether the ensemble is sequential (necessary for layers with states)
     """
 
     def __init__(
