@@ -337,11 +337,11 @@ def setup_config(
     if not torch.cuda.is_available():
         if config.system.storing_device == "cuda":
             raise RuntimeError(
-                f"Found no NVIDIA GPU available on this device. Rerun with '--system.storing_device=cpu' to avoid this error."
+                "Found no NVIDIA GPU available on this device. Rerun with '--system.storing_device=cpu' to avoid this error."
             )
         if config.system.device == "cuda":
             raise RuntimeError(
-                f"Found no NVIDIA GPU available on this device. Rerun with '--system.device=cpu' to avoid this error."
+                "Found no NVIDIA GPU available on this device. Rerun with '--system.device=cpu' to avoid this error."
             )
 
     # Check for accessability of path
