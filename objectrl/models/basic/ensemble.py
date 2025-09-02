@@ -17,6 +17,7 @@
 # -----------------------------------------------------------------------------------
 
 import copy
+import warnings
 from abc import ABC
 from typing import Literal, Any
 
@@ -39,7 +40,7 @@ class Ensemble[T: nn.Module](nn.Module, ABC):
         buffers (dict[str, torch.Tensor]): Stacked buffers of the ensemble members.
         base_model (nn.Module): Base model structure for functional calls.
         forward_model (torch.nn.functional): Vectorized function to call the model.
-        sequential (bool): Whether the ensemble is sequential (necessary for layers with states)
+        sequential (bool): Whether the ensemble is sequential (necessary for stateful layers)
     """
 
     def __init__(
@@ -57,7 +58,7 @@ class Ensemble[T: nn.Module](nn.Module, ABC):
             n_members (int): The number of members in the ensemble
             models (list[nn.Module]): List of models to parallelize
             device (str): The device to use
-            sequential (bool): Whether the ensemble is sequential (necessary for layers with states)
+            sequential (bool): Whether the ensemble is sequential (necessary for stateful layers)
             compile (bool): Whether the ensemble is compiled or not
         Returns:
             None
@@ -68,6 +69,13 @@ class Ensemble[T: nn.Module](nn.Module, ABC):
 
         self.sequential = sequential
         self.device = device
+
+        if not sequential and len(list(models[0].buffers())) > 0:
+            warnings.warn(
+                f"The net contains a non-empty buffer. Switch to sequential ensemble for proper updates.",
+                stacklevel=2,
+            )
+            self.sequential = True
 
         if sequential:
             self.models = nn.ModuleList(models)
