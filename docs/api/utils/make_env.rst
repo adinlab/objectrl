@@ -1,8 +1,9 @@
 Make Environment Utility
 ==========================
 
-This module defines a utility function to create Gymnasium environments with support
-for noise injection, reward shaping, action rescaling, and consistent seeding.
+This module defines a utility function to create environments with support
+for noise injection, reward shaping, action rescaling, and consistent seeding. 
+Environment names are mapped to standardized strings, using Gymnasium IDs for MuJoCo tasks and custom identifiers for DM Control tasks.
 
 Function
 --------

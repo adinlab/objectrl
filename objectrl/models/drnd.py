@@ -70,9 +70,8 @@ class DRNDBonus(nn.Module):
 
     def reset(self) -> None:
         self.target_ensemble = Ensemble(
-            self.n_members,
-            self.gen_net(),
-            [self.gen_net() for _ in range(self.n_members)],
+            n_members=int(self.n_members),
+            models=[self.gen_net() for _ in range(self.n_members)],
             device=self.device,
         )
 

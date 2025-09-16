@@ -235,7 +235,6 @@ class CriticEnsemble(nn.Module, ABC):
 
         self.model_ensemble = Ensemble[nn.Module](
             n_members=int(self.n_members),
-            prototype=Critic(config, dim_state, dim_act).model,
             models=[
                 Critic(config, dim_state, dim_act).model for _ in range(self.n_members)
             ],
@@ -243,16 +242,12 @@ class CriticEnsemble(nn.Module, ABC):
         )
 
         self.optim = create_optimizer(self.config.training)(
-            [
-                self.model_ensemble.params[key]
-                for key in self.model_ensemble.params.keys()
-            ]
+            self.model_ensemble.parameters()
         )
 
         if self.has_target:
             self.target_ensemble = Ensemble[nn.Module](
                 n_members=int(self.n_members),
-                prototype=Critic(config, dim_state, dim_act).target,  # type: ignore // we know that the target exists
                 models=[
                     Critic(config, dim_state, dim_act).target
                     for _ in range(self.n_members)
@@ -273,8 +268,7 @@ class CriticEnsemble(nn.Module, ABC):
             None
         """
         self.model_ensemble = Ensemble[nn.Module](
-            n_members=self.n_members,
-            prototype=Critic(self.config, self.dim_state, self.dim_act).model,
+            n_members=int(self.n_members),
             models=[
                 Critic(self.config, self.dim_state, self.dim_act).model
                 for _ in range(self.n_members)

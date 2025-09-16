@@ -32,7 +32,7 @@ Base Experiment
 
 .. raw:: html
 
-    <p>The <strong>Experiment</strong> class serves as a blueprint for all experiment types. It initializes the environment and agent using the provided <code>MainConfig</code> object. Environment names are mapped to standard Gym-compatible strings. This base class is extended by other experiment types that implement concrete logic for <code>train()</code> and <code>test()</code> methods.</p>
+    <p>The <strong>Experiment</strong> class serves as a blueprint for all experiment types. It initializes the environment and agent using the provided <code>MainConfig</code> object. This base class is extended by other experiment types that implement concrete logic for <code>train()</code> and <code>test()</code> methods.</p>
 
 Control Experiment
 ------------------

@@ -25,7 +25,7 @@ This documentation is organized into several key sections to help you get starte
 Supported Algorithms
 ---------------------
 
-ObjectRL is designed primarily as a research and rapid prototyping framework. Our initial focus has been on implementing deep actor-critic algorithms for continuous control tasks, especially targeting the MuJoCo environment suite. The object-oriented design, however, enables future extensions to value-based methods and discrete action settings.
+ObjectRL is designed primarily as a research and rapid prototyping framework. Our initial focus has been on implementing deep actor-critic algorithms for continuous control tasks in the MuJoCo, DM Control, and MetaWorld environment suites. The object-oriented design, however, enables future extensions to value-based methods and discrete action settings.
 
 Currently, the main algorithms supported include:
 
