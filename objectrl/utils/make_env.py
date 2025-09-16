@@ -19,13 +19,53 @@
 import gymnasium as gym
 import numpy as np
 import torch
-from gymnasium.wrappers import RescaleAction
+from gymnasium.wrappers import FlattenObservation, RescaleAction
 
+from objectrl.utils.environment.dmc_wrappers import DMCEnv
+from objectrl.utils.environment.metaworld_wrappers import SparsifyRewardWrapper
 from objectrl.utils.environment.noisy_wrappers import (
     NoisyActionWrapper,
     NoisyObservationWrapper,
 )
 from objectrl.utils.environment.reward_wrappers import PositionDelayWrapper
+
+gymnasium_mujoco_mappings = {
+    "ant": "Ant-v5",
+    "cartpole": "CartPole-v1",
+    "cheetah": "HalfCheetah-v5",
+    "hopper": "Hopper-v5",
+    "humanoid": "Humanoid-v5",
+    "reacher": "Reacher-v5",
+    "swimmer": "Swimmer-v5",
+    "walker2d": "Walker2d-v5",
+}
+
+dmc_mappings = {
+    "dmc-quadruped-run": "dmc-quadruped-run",
+    "dmc-humanoid-run": "dmc-humanoid-run",
+    "dmc-cheetah-run": "dmc-cheetah-run",
+    "dmc-hopper-hop": "dmc-hopper-hop",
+    "dmc-walker-run": "dmc-walker-run",
+}
+
+metaworld_mappings = {
+    "metaworld-window-close": "window-close-v3",
+    "metaworld-window-open": "window-open-v3",
+    "metaworld-drawer-close": "drawer-close-v3",
+    "metaworld-drawer-open": "drawer-open-v3",
+    "metaworld-reach": "reach-v3",
+    "metaworld-button-press-topdown": "button-press-topdown-v3",
+    "metaworld-door-open": "door-open-v3",
+}
+
+env_mappings = {
+    # Gymnasium environments
+    **gymnasium_mujoco_mappings,
+    # DMC environments
+    **dmc_mappings,
+    # MetaWorld environments
+    **metaworld_mappings,
+}
 
 
 def make_env(  # noqa: C901
@@ -36,13 +76,16 @@ def make_env(  # noqa: C901
     reward shaping, and consistent seeding.
 
     This function supports:
+    - Gymnasium MuJoCo tasks
+    - DM Control tasks, automatically wrapped for Gymnasium compatibility
+    - MetaWorld tasks, with optional sparse rewards
     - Action rescaling to [-1, 1]
     - Noisy action and/or observation wrappers
     - Delayed reward and control cost penalties via PositionDelayWrapper
     - Reproducibility via consistent seeding for Gym, NumPy, and PyTorch
 
     Args:
-        env_name (str): Name of the Gym environment (must be registered in Gym).
+        env_name (str): Name of the environment. Must be present in ``env_mappings`` and can belong to Gymnasium MuJoCo, DM Control, or MetaWorld suites.
         seed (int): Base random seed for reproducibility.
         env_config: Configuration object with nested attributes:
             - env_config.noisy.noisy_act (float): Std of Gaussian noise for actions.
@@ -62,12 +105,34 @@ def make_env(  # noqa: C901
 
     seed = seed + (100 if eval_env else 0)
     # Check if the env is in gym.
-    env_ids = list(gym.envs.registry.keys())
-    if env_name not in env_ids:
-        raise gym.error.Error(f"Environment '{env_name}' not found.")
+    env_name = env_mappings.get(env_name, env_name)
 
+    # ruff: noqa: C901
     def _make_single_env():
-        env = gym.make(env_name)
+        if env_name in gymnasium_mujoco_mappings.values():
+            if env_name in list(gym.envs.registry.keys()):
+                env = gym.make(env_name)
+            else:
+                raise gym.error.Error(
+                    f"Environment '{env_name}' is not registered in Gym."
+                )
+        elif env_name in dmc_mappings.values():
+            try:
+                _, domain, task = env_name.split("-", 2)
+            except ValueError as err:
+                raise ValueError(
+                    f"DMC environment name '{env_name}' is not in the expected format 'dmc-<domain>-<task>'."
+                ) from err
+            env = DMCEnv(
+                domain_name=domain, task_name=task, task_kwargs={"random": seed}
+            )
+            env = FlattenObservation(env)
+        elif env_name in metaworld_mappings.values():
+            env = gym.make("Meta-World/MT1", env_name=env_name, seed=seed)
+            if env_config.sparse_rewards:
+                env = SparsifyRewardWrapper(env)
+        else:
+            raise gym.error.Error(f"Environment '{env_name}' not found.")
 
         if not isinstance(env.action_space, gym.spaces.Discrete):
             env = RescaleAction(env, np.float32(-1.0), np.float32(1.0))

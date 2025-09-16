@@ -307,7 +307,7 @@ class Harvester:
             for fig, plotter in ((fig_all, ax), (fig_env, ax_env)):
                 plotter.set_title(r"\texttt{" + f"{env.capitalize()}" + r"}")
                 plotter.set_xlabel("Timesteps")
-                plotter.set_ylabel("Return")
+                plotter.set_ylabel(self.config.y_axis)
                 plotter.legend()
                 plotter.grid()
                 plotter.set_xlim(

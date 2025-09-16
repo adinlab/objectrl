@@ -50,23 +50,11 @@ class Experiment:
         self.config = config
         self.n_total_steps = 0
 
-        env_mappings = {
-            "ant": "Ant-v5",
-            "cartpole": "CartPole-v1",
-            "cheetah": "HalfCheetah-v5",
-            "hopper": "Hopper-v5",
-            "humanoid": "Humanoid-v5",
-            "reacher": "Reacher-v5",
-            "swimmer": "Swimmer-v5",
-            "walker2d": "Walker2d-v5",
-        }
-
-        # Use either the nickname in `env_mappings` or the original gymnasium name
-        env_name = env_mappings.get(self.config.env.name, self.config.env.name)
-
-        self.env = make_env(env_name, self.config.system.seed, self.config.env)
+        self.env = make_env(
+            self.config.env.name, self.config.system.seed, self.config.env
+        )
         self.eval_env = make_env(
-            env_name,
+            self.config.env.name,
             self.config.system.seed,
             self.config.env,
             eval_env=True,

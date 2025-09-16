@@ -80,6 +80,7 @@ class EnvConfig:
         noisy (NoiseConfig | None): Optional noise configuration.
         position_delay (float | None): Optional delay in position updates.
         control_cost_weight (float | ): Optional weight for control cost penalty.
+        sparse_rewards (bool): Whether to use sparse rewards.
     """
 
     name: (
@@ -91,12 +92,26 @@ class EnvConfig:
             "humanoid",
             "reacher",
             "swimmer",
+            "walker2d",
+            "dmc-quadruped-run",
+            "dmc-humanoid-run",
+            "dmc-cheetah-run",
+            "dmc-hopper-hop",
+            "dmc-walker-run",
+            "metaworld-window-close",
+            "metaworld-window-open",
+            "metaworld-drawer-close",
+            "metaworld-drawer-open",
+            "metaworld-reach",
+            "metaworld-button-press-topdown",
+            "metaworld-door-open",
         ]
         | str
     ) = "cheetah"
     noisy: NoiseConfig | None = None
     position_delay: float | None = None
     control_cost_weight: float | None = None
+    sparse_rewards: bool = False
 
 
 # [end-env-config]
@@ -293,6 +308,7 @@ class HarvestConfig:
         height (int): Plot height.
         width (int): Plot width.
         dpi (int): Plot DPI.
+        y_axis (str): Label for the y-axis in plots.
     """
 
     # Provide additional output
@@ -312,6 +328,18 @@ class HarvestConfig:
             "reacher",
             "swimmer",
             "walker2d",
+            "dmc-quadruped-run",
+            "dmc-humanoid-run",
+            "dmc-cheetah-run",
+            "dmc-hopper-hop",
+            "dmc-walker-run",
+            "metaworld-window-close",
+            "metaworld-window-open",
+            "metaworld-drawer-close",
+            "metaworld-drawer-open",
+            "metaworld-reach",
+            "metaworld-button-press-topdown",
+            "metaworld-door-open",
         ]
     ] = field(default_factory=lambda: ["cheetah"])
 
@@ -331,6 +359,8 @@ class HarvestConfig:
     height: int = 5
     width: int = 10
     dpi: int = 200
+    # label for the y axis, e.g., "Return" or "Success Rate"
+    y_axis: str = "Return"
 
     def __post_init__(self):
         """Convert log and result paths to Path objects."""

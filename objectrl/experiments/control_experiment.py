@@ -174,6 +174,7 @@ class ControlExperiment(Experiment):
         self.agent.logger.save(information_dict, episode, step)
         self.agent.logger.log(f"Training time: {time_end - time_start:.2f} seconds")
 
+    # ruff: noqa: C901
     @torch.inference_mode()
     def eval(self, n_step: int) -> None:
         """
@@ -248,6 +249,11 @@ class ControlExperiment(Experiment):
                     # Update state and record reward
                     state = totorch(next_state, device=self.device)
                     results[episode] += reward
+
+                # If using Sparse MetaWorld env, adjust reward to reflect success
+                # mean_reward in save_eval_results will be equal to success rate
+                if "success" in info and self.config.env.sparse_rewards:
+                    results[episode] = reward + 1.0
 
         self.agent.logger.save_eval_results(n_step, results)
         if self.verbose:
