@@ -19,7 +19,7 @@
 import copy
 import warnings
 from abc import ABC
-from typing import Literal, Any
+from typing import Any, Literal
 
 import torch
 from torch import func as thf
@@ -72,7 +72,7 @@ class Ensemble[T: nn.Module](nn.Module, ABC):
 
         if not sequential and len(list(models[0].buffers())) > 0:
             warnings.warn(
-                f"The net contains a non-empty buffer. Switch to sequential ensemble for proper updates.",
+                "The net contains a non-empty buffer. Switch to sequential ensemble for proper updates.",
                 stacklevel=2,
             )
             self.sequential = True
